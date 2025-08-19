@@ -47,11 +47,32 @@ public:
 
     // find out where and how T came from, from type traits library?
 
+    /*
+    utilizing memory order relaxed*/
     template <typename... Args>
     void emplace(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args&&...>::value)
     {
         static_assert(std::is_constructible<T, Args&&...>::value,
             "T must be constructible with Args&&...");
+
+        const auto writeIndex = writeIndex._load(std::memory_order_relaxed);
+        auto nextWriteIndex = writeIndex + 1;
+
+        // next write index is equal to the capacity, need to define _capacity
+        // placeholder for now
+        while (nextWriteIndex == capacity_) {
+            nextIndex = 0;
+        }
+
+        // Need to create readIndexCache in private access modifier
+        while (nextWriteIndex == readIndexCache_) {
+            readIndexCache_ = readIndex.load(std::memory_order_acquire);
+        }
+
+
+
+
+        
     }
 
     template <typename... Args>
