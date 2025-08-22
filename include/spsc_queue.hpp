@@ -1,10 +1,11 @@
+// lock free single producer, a single consumer circular buffer using 
+// atomic operations and memory ordering semantics
+
 #include <atomic>
 #include <iostream>
 #include <cstddef> // for size_t 
 #include <type_traits> // for is copy constructable
-// why do i need RIGTORP_NODISCARD [[nodiscard]]
-// lock free single producer, a single consumer circular buffer using 
-// atomic operations and memory ordering semantics
+// why do i need RIGTORP_NODISCARD [[nodiscard]] (states that function return value should not be ignored)
 #include <concepts>
 #include <new>
 
@@ -98,8 +99,10 @@ public:
         }
 
         // allocating new memory, pass in address of slots, writeIndex + kPadding
-        // 
-
+        // utilize perfect forwarding to pass arguments of T 
+        // release memroy through std::memory_order_release
+        new(&slots_[writeIndex + kPadding]) T(std::forward<args>(args)...);
+        writeIndex_.store(nextWriteIndex, std::memory_order_release);
     }
 
     template <typename... Args>
@@ -173,9 +176,9 @@ private:
     // find out what is wrong here
     static constexpr size_t kPadding = (kCacheLineSize - 1) / sizeof(T) + 1; 
 
-    size_t capacity;
+    size_t capacity_;
     T *slots_;
-    // define allocator as well
+
     #if defined(__has_cpp_attribute) && __has_cpp_attribute(no_unique_address)
         Allocator allocator_ [[no_unique_address]];
     #else 
