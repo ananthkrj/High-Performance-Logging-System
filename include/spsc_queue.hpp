@@ -117,7 +117,23 @@ public:
     {
         static_assert(std::is_constructible<T, Args&&...>::value,
             "T must be constructible with Args&&...");
+        
+        const writeIndex = writeIndex._load(std::memory_order_relaxed);
+        const nextWriteIndex = writeIndex + 1;
 
+        if (nextWriteIndex == capacity_){
+            nextWriteIndex = 0;
+        }
+        if (nextWriteIndex == readIndexCache_) {
+            readIndexCache_ = readIndex_.load(std::memory_order_acquire);
+            if (nextWriteIndex == readIndexCache_) {
+                return false;
+            }
+        }
+
+        new(&slots[writeIndex + kPadding]) T(std::forward<Args>(args...));
+        writeIndex_.store(nextWriteIndex, std::memory_order_release);
+        return true;
     }
 
 
@@ -176,6 +192,7 @@ private:
     // find out what is wrong here
     static constexpr size_t kPadding = (kCacheLineSize - 1) / sizeof(T) + 1; 
 
+    // find out point of capacity and slots
     size_t capacity_;
     T *slots_;
 
@@ -191,6 +208,8 @@ private:
 
     // types of variables, initlize all to 0 for initial state
     // atomic, 
+
+    // find out what these variables do
     alignas(KCacheLineSize) std::atomic<size_t> readIndex_ = {0};
     // size_t
     alignas(KCacheLineSize) size_t readIndexCache_ = 0;
