@@ -106,13 +106,6 @@ public:
     }
 
     template <typename... Args>
-    void force_emplace(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args&&...>::value)
-    {
-        static_assert(std::is_constructible<T, Args&&...>::value,
-            "T must be constructible with Args&&...");
-    }
-
-    template <typename... Args>
     bool try_emplace(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args&&...>::value)
     {
         static_assert(std::is_constructible<T, Args&&...>::value,
@@ -136,27 +129,38 @@ public:
         return true;
     }
 
-
-    void push() {
-
+    // throw a no except: which means to check if an object of
+    // type T can be constructed from a set of Args without throwing
+    // an exception
+    void push(const T &v) noexcept(std::is_nothrow_constructible<T>::value) 
+    {
+        static_assert(std::is_copy_constructible<T>::value, 
+            "T must be copy constructible");
+        emplace(v);
     }
 
-    void force_push() {
+    // alternative push with P type and std::forward<P>(v) pass in
+    void push()
 
+    // regular try push
+    // type T can be constructed without throwing an exception
+    [[nodiscard]] bool
+    void try_push(const T &v) noexcept(std::is_nothrow_constructible<T>::value)
+    {
+        static_assert(std::is_copy_constructible<T>::value,
+            "T must be copy constructible");
+        return try_emplace(v);
     }
 
-    void try_push() {
+    // alternative try push
+    [[nodiscard]] void try_push() {
 
     }
-
 
     void pop() {
 
     }
 
-    void try_pop() {
-
-    }
 
     // all other functions are size or empty functions/getters/setters
     // [[nodiscard]], return value of function should not be ignored

@@ -14,3 +14,11 @@ TEST(SPSCQueue, tryemplace) {
 TEST(SPSCQueue, forcemplace) {
 
 }
+
+TEST(SPSCQueue, push) {
+
+}
+
+TEST(SPSCQueue, trypush) {
+
+}
