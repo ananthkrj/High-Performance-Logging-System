@@ -130,7 +130,7 @@ public:
     }
 
     // throw a no except: which means to check if an object of
-    // type T can be constructed from a set of Args without throwing
+    // type T can be constructed without throwing
     // an exception
     void push(const T &v) noexcept(std::is_nothrow_constructible<T>::value) 
     {
@@ -140,12 +140,20 @@ public:
     }
 
     // alternative push with P type and std::forward<P>(v) pass in
-    void push()
+    // function template is only valid if T is constructed from P&&
+    template<typename P, typename> = typename std::enable_if<
+                                std::is_constructible<T, P &&>::value::type>
+    
+    // type T and P can be constructed without throwing an exception
+    void push(P &&v) noexcept(std::is_nothrow_constructible<T, P>::value)
+    {
+        emplace(std::forward<P>(v));
+    }
 
     // regular try push
     // type T can be constructed without throwing an exception
     [[nodiscard]] bool
-    void try_push(const T &v) noexcept(std::is_nothrow_constructible<T>::value)
+    try_push(const T &v) noexcept(std::is_nothrow_constructible<T>::value)
     {
         static_assert(std::is_copy_constructible<T>::value,
             "T must be copy constructible");
@@ -153,7 +161,17 @@ public:
     }
 
     // alternative try push
-    [[nodiscard]] void try_push() {
+    // template function is only valid if T is construxted from P&&
+    template<typename P, typename> = typename std::enable_if<
+                                std::is_constructible<T, P &&>::value::type>
+    [[nodiscard]] bool
+    try_push(P &&v) noexcept(std::is_nothrow_constructible<T, P>::value);
+    {
+        return try_emplace(std::forward<P>(v));
+    }
+
+    [[nodiscard]] T *front() 
+    {
 
     }
 
