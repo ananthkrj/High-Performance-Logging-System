@@ -5,11 +5,5 @@
 // 10 - 100x times faster than standard file io for write heavy workloads
 // like logging
 
-
-// memory mapped function
-
-
-// sequential write function
-
-
-// atomic file rotation function
+// goals: find out what a mmap writeer even does 
+// (likely need to write heavy workloads)

@@ -170,13 +170,33 @@ public:
         return try_emplace(std::forward<P>(v));
     }
 
-    [[nodiscard]] T *front() 
+    [[nodiscard]] T *front() noexcept
     {
+        auto const readIndex = readIndex_.load(std::memory_order_relaxed);
+        if (readIndex_ == writeIndexCache_) {
+            writeIndexCache_ = writeIndex_.load(std::memory_order_acquire);
+            if (read_index_ == writeIndexCache_) {
+                return nullptr;
+            }
+        }
+        return &slots_[readIndex + kpadding];
 
     }
 
-    void pop() {
+    void pop() noexcept(){
+        static_assert(std::is_nothrow_destructible<T>::value,
+                    "T must be nothrow destructible");
+            
+        auto const readIndex = readIndex_.load(std::memory_order_relaxed);
 
+        // implement assert for push to occur before pop later
+
+        slots_[readIndex + kPadding].~T();
+        const nextReadIndex = readIndex + 1;
+        if (nextReadIndex == capacity_) {
+            nextReadIndex = 0;
+        }
+        readIndex_.store(nextReadIndex, std::memory_order_release);
     }
 
 
