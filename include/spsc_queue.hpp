@@ -22,6 +22,9 @@
 
 template <typename T, typename Allocator = std::allocator<T>> class SPSCQueue {
 
+// Alloc 2 define cpp feature
+
+
 /*
 populate with functions i will need regardless
 of implementation style
@@ -78,6 +81,10 @@ public:
 
     /*
     utilizing memory order relaxed*/
+
+    // non copyable and non moveable portion
+
+
     template <typename... Args>
     void emplace(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args&&...>::value)
     {
@@ -189,7 +196,8 @@ public:
             
         auto const readIndex = readIndex_.load(std::memory_order_relaxed);
 
-        // implement assert for push to occur before pop later
+        // implement assert for front to return a non nullptr
+        // to occur before pop later
 
         slots_[readIndex + kPadding].~T();
         const nextReadIndex = readIndex + 1;
@@ -200,18 +208,38 @@ public:
     }
 
 
-    // all other functions are size or empty functions/getters/setters
-    // [[nodiscard]], return value of function should not be ignored
-    [[nodiscard]] size_t size() {
+    /*
+    Create pointer that is diff between writeIndex and readIndex
+    for memory_order_acquire. return the diff used size_t
 
+    if the diff is less than 0, increment diff with capacity_
+
+    hold diff between two pointers which even can be neghative
+    */
+    [[nodiscard]] size_t size() const noexcept {
+        std::ptrdiff_t diff = writeIndex_.load(std::memory_order_acquire) -
+                              readIndex_.load(std::memory_order_acquire);
+        
+        if (diff < 0) {
+            diff += capacity_;
+        }
+        return static_cast<size_t>(diff);
     }
 
-    [[nodiscard]] bool empty() {
-
+    /*
+    Difference between memory order acquiring for writeindex
+    and readindex, figure out why it has to be acquire
+    */
+    [[nodiscard]] bool empty() const noexcept {
+        return writeIndex_.load(std::memory_order_acquire) ==
+               readIndex_.load(std::memory_order_acquire);
     }
 
-    [[nodsicard]] size_t capacity() {
-
+    /*
+    Return total capacity with negative indexing
+    */
+    [[nodiscard]] size_t capacity() const noexcept {
+        return capacity_ - 1;
     }
 
 
