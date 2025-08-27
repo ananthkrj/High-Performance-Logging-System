@@ -66,24 +66,24 @@ public:
             capacity_ = res.count - 2 * kPadding;
 
             // allows containers to interact with any allocator type
-            slots_ = std::allocator_traits<Allocate>::allocate(allocator_, capacity_ + 2 * kPadding);
+            slots_ = std::allocator_traits<Allocator>::allocate(allocator_, capacity_ + 2 * kPadding);
 
             // asserts and tests
     
     }
 
     // destructor
+    ~spsc_queue() {
+        while (front()) {
+            pop();
+        }
+        // deallocate using allocator traits
+        std::allocator_traits<Allocator>::deallocate(allocator_, slots_, capacity + 2 * kPadding);
+    }
 
-    // need to place a noeexcept, as type must have
-    // a constructor for the Args argument
-
-    // find out where and how T came from, from type traits library?
-
-    /*
-    utilizing memory order relaxed*/
-
-    // non copyable and non moveable portion
-
+    // non copyable and non moveable portion, find out what this does
+    spsc_queue(const spsc_queue &) = delete;
+    spsc_queue &operator=(const spsc_queue &) = delete;
 
     template <typename... Args>
     void emplace(Args&&... args) noexcept(std::is_nothrow_constructible<T, Args&&...>::value)
