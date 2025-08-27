@@ -22,9 +22,19 @@
 
 template <typename T, typename Allocator = std::allocator<T>> class SPSCQueue {
 
-// Alloc 2 define cpp feature
+// feature test macro that check if these two features are avaialble
+#if defined(__cpp_if_constexpr) && defined(_cpp_lib_void_t)
+// find out what this means, what the two struct initializations do
+// what do importance of the type delcarations using templates do
+  template <typename Alloc2, typename = void>
+  struct has_allocate_at_least : std::false_type {};
 
-
+  template <typename Alloc2>
+  struct has_allocate_at_least<
+      Alloc2, std::void_t<typename Alloc2::value_type,
+                          decltype(std::declval<Alloc2 &v>().allocate_at_least(
+                            size_t{})) : std::try_type{};
+#endif
 /*
 populate with functions i will need regardless
 of implementation style
@@ -60,16 +70,22 @@ public:
         }
 
         // add macro check for allocator at least and if constexpr
-
+    #if defined(__cpp_if_constexpr) && defined(__cpp_lib_void_t)
+        if constexpr (has_allocate_at_least<Allocator>::value) {
             auto res = allocator_.allocator_at_least(capacity_ + 2 * kPadding);
             slots_ = res.ptr;
             capacity_ = res.count - 2 * kPadding;
-
+        } else {
             // allows containers to interact with any allocator type
-            slots_ = std::allocator_traits<Allocator>::allocate(allocator_, capacity_ + 2 * kPadding);
+            slots_ = std::allocator_traits<Allocator>::allocate(allocator_,
+            capacity_ + 2 * kPadding);
+        }
+    #else
+        slots_ = std::allocator_traits<Allocator>::allocate(allocator_,
+        capacity_ + 2 * kPadding);
+    #endif
 
-            // asserts and tests
-    
+        // asserts and tests
     }
 
     // destructor
