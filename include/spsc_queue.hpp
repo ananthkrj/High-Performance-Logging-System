@@ -55,7 +55,7 @@ properties of types at compile time, (need to do this for Args)
 */
 public:
     // constructor (will be allocating here)
-    explicit spsc_queue(const size_t capacity, const Allocator *allocator = Allocator()) 
+    explicit SPSCQueue(const size_t capacity, const Allocator *allocator = Allocator()) 
     : capacity_(capacity), allocator_(allocator) {
 
         // capacity of queue needs to hae something
@@ -89,7 +89,7 @@ public:
     }
 
     // destructor
-    ~spsc_queue() {
+    ~SPSCQueue() {
         while (front()) {
             pop();
         }
