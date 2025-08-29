@@ -20,6 +20,7 @@
 
 // template declaration for class
 
+namespace TesthighLogger {
 template <typename T, typename Allocator = std::allocator<T>> class SPSCQueue {
 
 // feature test macro that check if these two features are avaialble
@@ -304,3 +305,4 @@ private:
     // size_t
     alignas(KCacheLineSize) size_t writeIndexCache_ = 0;
 };
+}
