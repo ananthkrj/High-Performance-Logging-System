@@ -11,6 +11,9 @@ implementation to test
 // implementation to test this one, then test
 // the custom built spsc_queue class
 
+/*
+Comment constructor tests out for now
+
 TEST(SPSCQueue, constructor) {
 
 }
@@ -19,6 +22,7 @@ TEST(SPSCQueue, destructor) {
 
 }
 
+*/
 
 /*
 1. Initialize the queue
@@ -30,7 +34,7 @@ TEST(SPSCQueue, destructor) {
 TEST(SPSCQueue, emplace) {
     // regular emplacing
     highLogger::SPSCQueue<int> regQueue(10);
-    size_t initialSize = testQueue.size();
+    size_t initialSize = regQueue.size();
 
     testQueue.emplace(38);
     
