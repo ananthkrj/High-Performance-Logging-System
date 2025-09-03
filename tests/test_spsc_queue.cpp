@@ -119,7 +119,7 @@ TEST(SPSCQueue, push) {
     pQueue.push(6);
     pQueue.push(7);
     ASSERT_EQ(pQueue.size(), 3);
-    
+
     // push after pop
     pQueue.pop();
     pQueue.push(8);
@@ -127,25 +127,6 @@ TEST(SPSCQueue, push) {
 }
 
 /*
-TEST(SPSCQueue, push) {
-    highLogger::SPSCQueue<int> pushQueue(3);
-
-    // first test individual element
-    pushQueue.push(3);
-
-    int* frontElement = pushQueue.front();
-    ASSERT_NE(frontElement, nullptr);
-    ASSERT_EQ(*frontElement, 3);
-    ASSERT_EQ(pushQueue.size(), 1);
-
-    // now test pushing multiple elements
-    pushQueue.push(4);
-    pushQueue.push(5);
-    int* newFrontElement = pushQueue.front();
-    ASSERT_EQ(*newFrontElement, 3);
-    ASSERT_EQ(pushQueue.size(), 3);
-}
-
 TEST(SPSCQueue, front) {
     // figure out if i need to do multiple references
     // to frontElement or if this can act akin 
@@ -272,3 +253,30 @@ TEST(SPSCQueue, capacity) {
 
 // move onto fixture tests after function validation done
 */
+
+TEST(SPSCQueue, pop) {
+    highLogger::SPSCQueue<int> pQueue(3);
+    int* frontElement3 = pQueue.front();
+
+    // test pop with one element
+    pQueue.push(7);
+
+    ASSERT_NE()
+    pQueue.pop();
+
+    ASSERT_EQ(pQueue.size(), 0);
+    
+}
+
+TEST(SPSCQueue, size) {
+
+}
+
+TEST(SPSCQueue, empty) {
+
+}
+
+TEST(SPSCQueue, capacity) {
+
+
+}
