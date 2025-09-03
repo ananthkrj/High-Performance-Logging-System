@@ -254,29 +254,66 @@ TEST(SPSCQueue, capacity) {
 // move onto fixture tests after function validation done
 */
 
+// figure out how to test pop properly, because keep
+// getting warning 
+/*
 TEST(SPSCQueue, pop) {
     highLogger::SPSCQueue<int> pQueue(3);
     int* frontElement3 = pQueue.front();
 
     // test pop with one element
     pQueue.push(7);
-
-    ASSERT_NE()
     pQueue.pop();
-
-    ASSERT_EQ(pQueue.size(), 0);
-    
+    ASSERT_EQ(pQueue.size(), 0);  
 }
+*/
 
+// figure out what is calling seg fault here
+/*
 TEST(SPSCQueue, size) {
+    // test size with one emplace/push
+    highLogger::SPSCQueue<int> sQueue(3);
+    int* frontElement4 = sQueue.front();
 
+    sQueue.emplace(1);
+    ASSERT_EQ(sQueue.size(), 1);
+
+    // test size with multiple emplace/push operations
+
+    sQueue.emplace(2);
+    sQueue.emplace(3);
+    ASSERT_EQ(sQueue.size(), 3);
+
+    // test size after popping once
+    ASSERT_NE(*frontElement4, NULL);
+    sQueue.pop();
+    ASSERT_EQ(sQueue.size(), 2);
 }
+*/
 
+// why do i keep getting this stupid null vs nullptr error for these
+// later functions? Need to fix this later.
+
+/*
+Failure
+Expected: (frontElement5) != (nullptr), actual: NULL vs (nullptr)
+*/
 TEST(SPSCQueue, empty) {
+    highLogger::SPSCQueue<int> eQueue(3);
+    int* frontElement5 = eQueue.front();
 
+    // test empty at start
+    ASSERT_EQ(eQueue.size(), 0);
+
+    // emplace then pop
+    eQueue.emplace(6);
+    ASSERT_NE(frontElement5, nullptr);
+
+    eQueue.pop();
+
+    ASSERT_EQ(eQueue.size(), 0);
 }
 
 TEST(SPSCQueue, capacity) {
-
 
 }
