@@ -19,4 +19,5 @@ target_link_libraries(test GTest::GTest GTest::Main pthread)
 # How to launch and run lldb
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
 # cmake --build build
+# ./build/test  
 # lldb build/test
