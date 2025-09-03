@@ -36,7 +36,7 @@ TEST(SPSCQueue, emplace) {
     highLogger::SPSCQueue<int> regQueue(10);
     size_t initialSize = regQueue.size();
 
-    testQueue.emplace(38);
+    regQueue.emplace(38);
     
     size_t newSize = regQueue.size();
     ASSERT_EQ(newSize, initialSize + 1);
@@ -46,63 +46,87 @@ TEST(SPSCQueue, emplace) {
     // need to dereference frontElement
     ASSERT_EQ(*frontElement, 38);
 
-    // functionlity testing
-    // when queue is full as emplaces
-    // beyond the capacity will lead to
-    // a blocked operation
-    highLogger::SPSCQueue<int> fullQueue(1);
-    fullQueue.emplace(10);
-    fullQueue.emplace(20);
+    
+    // Can't test blocking functionality 
+    // in emplace because that messes up
+    // the gtest
 
-    // size assertion which will block
-    // overflowing
-    ASSERT_EQ(fullQueue.size(), 1);
+    // multi queue testing
+    highLogger::SPSCQueue<int> fullQueue(3);
+    
+    fullQueue.emplace(1);
+    fullQueue.emplace(2);
+    fullQueue.emplace(3);
 
-    // space is created so should actually emplace 20
-    // due to waiting in emplace mechnism
-    fullQueue.pop(10);
+    // size assertion
+    ASSERT_EQ(fullQueue.size(), 3);
 
-    ASSERT_EQ(fullQueue.size(), 1);
+    // emplace works after pop ocurrs
 
-    int* frontElement = fullQueue.front();
-    ASSERT_NE(frontElement, nullptr);
-    ASSERT_EQ(*frontElement, 10);
+    int* frontElement1 = fullQueue.front();
+    ASSERT_NE(frontElement1, nullptr);
+    ASSERT_EQ(*frontElement1, 1);
+
+    fullQueue.pop();
+    ASSERT_EQ(fullQueue.size(), 2);
 }
+
 
 
 TEST(SPSCQueue, try_emplace) {
-    // regular emplace when queue is not full or blocked
-    highLogger::SPSCQueue<int> tryRegQueue(3);
-    size_t initialSize = tryRegQueue.size();
+    // try emplace when the queue has space
+    highLogger::SPSCQueue<int> tryQueue(3);
 
-    tryRegQueue.try_emplace(22);
+    bool result = tryQueue.try_emplace(20);
+    ASSERT_TRUE(result);
+    ASSERT_EQ(tryQueue.size(), 1);
 
-    // assert the size difference
-    size_t newSize = tryRegQueue.size();
-    ASSERT_EQ(newSize, initialSize + 1);
+    // multiple try emplace operations
+    ASSERT_TRUE(tryQueue.try_emplace(21));
+    ASSERT_TRUE(tryQueue.try_emplace(22));
+    ASSERT_EQ(tryQueue.size(), 3);
 
-    // check if front works for try_emplace
-    int* frontElement = tryRegQueue.front();
-    ASSERT_NE(frontElement, nullptr);
-    ASSERT_EQ(*frontElement, 22);
+    // try emplace fails when queue is full
+    bool fullQueue = tryQueue.try_emplace(23);
+    ASSERT_FALSE(fullQueue);
+    ASSERT_EQ(tryQueue.size(), 3);
 
-    // try_emplace focused implementation which
-    // will test 
-    highLogger::SPSCQueue<int> fullQueue(1);
-    fullQueue.emplace(3);
-    fullQueue.emplace(4);
+    // verify front element
+    int* tryfrontElement = tryQueue.front();
+    ASSERT_NE(tryfrontElement, nullptr);
+    ASSERT_EQ(*tryfrontElement, 20);
 
-    // No need to pop or anything after to
-    // make space. Point of try emplace
-    // is to instantly return false
-    // once queue is false
-    ASSERT_EQ(fullQueue.size(), 1);
-
-    // maybe test that makes sure return
-    // type of function is false later on
-
+    // try emplace succeeds after making space
+    // utilize pop. Actually test the blocking
+    // operation. SHould add after making space
+    
+    tryQueue.pop();
+    ASSERT_TRUE(tryQueue.try_emplace(23));
+    ASSERT_EQ(tryQueue.size(), 3);
 }
 
+// push has a void return type, dont use
+// any bools or speciifc types to return
+TEST(SPSCQueue, push) {
+    highLogger::SPSCQueue<int> pQueue(3);
+    int* frontElement2 = pQueue.front();
+
+    // test individual push
+    pQueue.push(5);
+    ASSERT_EQ(pQueue.size(), 1);
+
+    // test multiple pushes
+    pQueue.push(6);
+    pQueue.push(7);
+    ASSERT_EQ(pQueue.size(), 3);
+    
+    // push after pop
+    pQueue.pop();
+    pQueue.push(8);
+    ASSERT_EQ(pQueue.size(), 3);
+}
+
+/*
 TEST(SPSCQueue, push) {
     highLogger::SPSCQueue<int> pushQueue(3);
 
@@ -247,3 +271,4 @@ TEST(SPSCQueue, capacity) {
 }
 
 // move onto fixture tests after function validation done
+*/

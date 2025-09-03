@@ -16,4 +16,7 @@ target_include_directories(test PRIVATE include)
 target_link_libraries(test GTest::GTest GTest::Main pthread)
 
 
-# How to launch lldb
+# How to launch and run lldb
+# cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+# cmake --build build
+# lldb build/test
