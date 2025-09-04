@@ -49,3 +49,14 @@ Process to go from concepts to code:
 
 header: estimated 60 - 80 lines of code
 */
+
+/*
+1. Start with a basic mmap Example
+Need to map a file, write some bytes to the file, then unmap
+*/
+namespace writer {
+
+class mmap_writer {
+
+};
+}
