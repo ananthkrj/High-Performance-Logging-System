@@ -61,16 +61,30 @@ using mmap to create files, using mmap to read files, using mmap to update files
 
 int main(int argc, char *argv[]) {
     // if statement to open the file
+    // cannot have 3 arguments
+    if (argc != 3) {
+        std::cout << "Usage : mmap_create <file-name> <Message>" << std::endl;
+        return 1;
+    }
 
-    // declare size of arguments
+    // declare the overall size of the arguments in a fsize variable
+    size_t fsize = strlen(argv[2]) + 1;
 
     // open file and get the fd (file descriptor)
-
+    // FLAGS will setup the file before mapping it to memory
+    // these flafs will create file if not already, to be opened
+    // for reading and wiring, and can be truncated to 0 bytes, and only 
+    // done with permission
+    int fd = open(argv[2], O_CREAT | O_RDWR | O_TRUNC, PERM);
     // print the size of the file
+    std::cout << "File: " << argv[1] << ": " << fsize << std::endl;
 
-    // set the file size
-
-    // mapping
+    // set the file size using lseek, which repositions to 
+    // read/write file offset, just setting offset to 0
+    lseek(fd, fsize-1, SEEK_SET);
+    write(fd, "\n", 1);
+    
+    // mapping, using more flags and void *addr
 
     // copy length of message into memory using mcpy
 
