@@ -84,13 +84,18 @@ int main(int argc, char *argv[]) {
     lseek(fd, fsize-1, SEEK_SET);
     write(fd, "\n", 1);
     
-    // mapping, using more flags and void *addr
-
+    // mapping, using more flags and declare addr as a vpid pointer
+    // store this mmapping in memory variable addr
+    void *addr = mmap(NULL, fsize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     // copy length of message into memory using mcpy
-
+    memcpy(addr, argv[2], strlen(argv[2]));
     // synchronize memory to file using msync
-
-    // unmap
-
+    msync(addr, fsize, MS_SYNC);
+    // unmap, just pass the memory var and size
+    munmap(addr, fsize);
     // close the file (fd) variable
+    close(fd);
+
+    // need to test
+    return EXIT_SUCCESS;
 }
