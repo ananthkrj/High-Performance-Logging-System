@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
     // done with permission
     int fd = open(argv[2], O_CREAT | O_RDWR | O_TRUNC, PERM);
     // print the size of the file
-    std::cout << "File: " << argv[1] << ": " << fsize << std::endl;
+    std::cout << "File: " << argv[1] << " size is " << fsize << std::endl;
 
     // set the file size using lseek, which repositions to 
     // read/write file offset, just setting offset to 0
