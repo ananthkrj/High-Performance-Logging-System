@@ -37,5 +37,3 @@ add_executable(mmap_update src/mmap_update.cpp)
 # cmake --build build
 # ./build/test  
 # lldb build/test
-
-# how the hell do i compile 
