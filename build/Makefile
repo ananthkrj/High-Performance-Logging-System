@@ -136,6 +136,43 @@ test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+#=============================================================================
+# Target rules for targets named mmap_create
+
+# Build rule for target.
+mmap_create: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mmap_create
+.PHONY : mmap_create
+
+# fast build rule for target.
+mmap_create/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/build
+.PHONY : mmap_create/fast
+
+src/mmap_create.o: src/mmap_create.cpp.o
+.PHONY : src/mmap_create.o
+
+# target to build an object file
+src/mmap_create.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/src/mmap_create.cpp.o
+.PHONY : src/mmap_create.cpp.o
+
+src/mmap_create.i: src/mmap_create.cpp.i
+.PHONY : src/mmap_create.i
+
+# target to preprocess a source file
+src/mmap_create.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/src/mmap_create.cpp.i
+.PHONY : src/mmap_create.cpp.i
+
+src/mmap_create.s: src/mmap_create.cpp.s
+.PHONY : src/mmap_create.s
+
+# target to generate assembly for a file
+src/mmap_create.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/src/mmap_create.cpp.s
+.PHONY : src/mmap_create.cpp.s
+
 tests/test_spsc_queue.o: tests/test_spsc_queue.cpp.o
 .PHONY : tests/test_spsc_queue.o
 
@@ -169,7 +206,11 @@ help:
 	@echo "... codegen"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... mmap_create"
 	@echo "... test"
+	@echo "... src/mmap_create.o"
+	@echo "... src/mmap_create.i"
+	@echo "... src/mmap_create.s"
 	@echo "... tests/test_spsc_queue.o"
 	@echo "... tests/test_spsc_queue.i"
 	@echo "... tests/test_spsc_queue.s"

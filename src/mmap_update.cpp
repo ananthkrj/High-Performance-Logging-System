@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     size_t length = strlen(argv[2]) + 1;
 
     // declare fd (file descriptor variable using args, O_RDWR, and the linux permission)
-    int fd = open(argv[2], O_RDWR, PERM);
+    int fd = open(argv[1], O_RDWR, PERM);
 
     // use fstat to get size of the file
     fstat(fd, &fileStatus);

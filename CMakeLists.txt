@@ -8,16 +8,27 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(GTest REQUIRED)
 
+# lanch spsc queue test
 add_executable(test tests/test_spsc_queue.cpp)
-
 # target include directories adds an include directory to the target
 target_include_directories(test PRIVATE include)
-
 target_link_libraries(test GTest::GTest GTest::Main pthread)
 
+# launch mmap writer functionality
+# add_executable(all_mmap src/mmap_create.cpp
+#   src/mmap_read.cpp
+#    src/mmap_update.cpp
+#)
+
+# test mmap functions indiviudally first
+add_executable(mmap_create src/mmap_create.cpp)
+add_executable(mmap_read src/mmap_read.cpp)
+add_executable(mmap_update src/mmap_update.cpp)
 
 # How to launch and run lldb
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
 # cmake --build build
 # ./build/test  
 # lldb build/test
+
+# how the hell do i compile 

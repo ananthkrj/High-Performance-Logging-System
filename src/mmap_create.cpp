@@ -20,44 +20,16 @@ and specific libraries for opening
 and closing files
 */
 #include <iostream>
-#include <sys/mman.h> // mmap and unmmap operations
-#include <fcntl.h> // open
-#include <unistd.h> // close
-#include <sys/stat.h> // interacting with files
+#include <sys/mman.h> // for man an unmap operations
+#include <sys/stat.h> // for struct stat, and file status functions
+// fogire 
+#include <fcntl.h> // to open file 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> // to close files
 
 // permit for linux/unix
 #define PERM 0644
-
-/*
-// declare file that will be worked on as a char variable
-    
-    // ensure file has desired size
-
-    // map the file into memory using the mmap operation
-
-    // access and modify data through the memory mapped region
-
-    // write initial data
-
-    // modify data
-
-    // unmap the memroy region
-
-    // close file descriptor
-
-    // verify chnages by reading the file
-
-    // cleanup: remove the file
-
-Goal of this modular program will be how to create, read, update, read, writer, mmap
-to files
-
-mmap allows a progrmam to directly acces file data as if
-it were part of the programs memory
-
-can be split into mmap_create.cpp, mmap_read.cpp, mmap_update.cpp
-using mmap to create files, using mmap to read files, using mmap to update files
-*/
 
 int main(int argc, char *argv[]) {
     // if statement to open the file
@@ -75,7 +47,7 @@ int main(int argc, char *argv[]) {
     // these flafs will create file if not already, to be opened
     // for reading and wiring, and can be truncated to 0 bytes, and only 
     // done with permission
-    int fd = open(argv[2], O_CREAT | O_RDWR | O_TRUNC, PERM);
+    int fd = open(argv[1], O_CREAT | O_RDWR | O_TRUNC, PERM);
     // print the size of the file
     std::cout << "File: " << argv[1] << " size is " << fsize << std::endl;
 
