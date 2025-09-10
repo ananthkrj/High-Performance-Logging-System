@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
     // need two argumentsm so args cant be 3
     if (argc != 3) {
-        std::cout << "Usage: mmap_update <file-name> <Message" << std::endl;
+        std::cout << "Usage: mmap_update <file-name> <Message>" << std::endl;
     }
 
     // initialize length of arguments

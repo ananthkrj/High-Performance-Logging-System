@@ -24,6 +24,13 @@ target_link_libraries(test GTest::GTest GTest::Main pthread)
 add_executable(mmap_create src/mmap_create.cpp)
 add_executable(mmap_read src/mmap_read.cpp)
 add_executable(mmap_update src/mmap_update.cpp)
+# How to launch and test the mmap operations
+# cmake --build build
+# ./build mmap_create fulltest.txt "message"
+# ./build mmap_read fulltest.txt
+# ./build mmap_update
+# Tests for all mmap operations fully work, however need to fix update
+# a little bit. Output text gets weird, and null. Or file cannot be displayed
 
 # How to launch and run lldb
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug

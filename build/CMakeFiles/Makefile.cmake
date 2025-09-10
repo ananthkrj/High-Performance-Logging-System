@@ -64,4 +64,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/test.dir/DependInfo.cmake"
   "CMakeFiles/mmap_create.dir/DependInfo.cmake"
+  "CMakeFiles/mmap_read.dir/DependInfo.cmake"
+  "CMakeFiles/mmap_update.dir/DependInfo.cmake"
   )

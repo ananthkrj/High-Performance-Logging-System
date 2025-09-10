@@ -149,6 +149,32 @@ mmap_create/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/build
 .PHONY : mmap_create/fast
 
+#=============================================================================
+# Target rules for targets named mmap_read
+
+# Build rule for target.
+mmap_read: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mmap_read
+.PHONY : mmap_read
+
+# fast build rule for target.
+mmap_read/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_read.dir/build.make CMakeFiles/mmap_read.dir/build
+.PHONY : mmap_read/fast
+
+#=============================================================================
+# Target rules for targets named mmap_update
+
+# Build rule for target.
+mmap_update: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mmap_update
+.PHONY : mmap_update
+
+# fast build rule for target.
+mmap_update/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/build
+.PHONY : mmap_update/fast
+
 src/mmap_create.o: src/mmap_create.cpp.o
 .PHONY : src/mmap_create.o
 
@@ -172,6 +198,54 @@ src/mmap_create.s: src/mmap_create.cpp.s
 src/mmap_create.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_create.dir/build.make CMakeFiles/mmap_create.dir/src/mmap_create.cpp.s
 .PHONY : src/mmap_create.cpp.s
+
+src/mmap_read.o: src/mmap_read.cpp.o
+.PHONY : src/mmap_read.o
+
+# target to build an object file
+src/mmap_read.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_read.dir/build.make CMakeFiles/mmap_read.dir/src/mmap_read.cpp.o
+.PHONY : src/mmap_read.cpp.o
+
+src/mmap_read.i: src/mmap_read.cpp.i
+.PHONY : src/mmap_read.i
+
+# target to preprocess a source file
+src/mmap_read.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_read.dir/build.make CMakeFiles/mmap_read.dir/src/mmap_read.cpp.i
+.PHONY : src/mmap_read.cpp.i
+
+src/mmap_read.s: src/mmap_read.cpp.s
+.PHONY : src/mmap_read.s
+
+# target to generate assembly for a file
+src/mmap_read.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_read.dir/build.make CMakeFiles/mmap_read.dir/src/mmap_read.cpp.s
+.PHONY : src/mmap_read.cpp.s
+
+src/mmap_update.o: src/mmap_update.cpp.o
+.PHONY : src/mmap_update.o
+
+# target to build an object file
+src/mmap_update.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/src/mmap_update.cpp.o
+.PHONY : src/mmap_update.cpp.o
+
+src/mmap_update.i: src/mmap_update.cpp.i
+.PHONY : src/mmap_update.i
+
+# target to preprocess a source file
+src/mmap_update.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/src/mmap_update.cpp.i
+.PHONY : src/mmap_update.cpp.i
+
+src/mmap_update.s: src/mmap_update.cpp.s
+.PHONY : src/mmap_update.s
+
+# target to generate assembly for a file
+src/mmap_update.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/src/mmap_update.cpp.s
+.PHONY : src/mmap_update.cpp.s
 
 tests/test_spsc_queue.o: tests/test_spsc_queue.cpp.o
 .PHONY : tests/test_spsc_queue.o
@@ -207,10 +281,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... mmap_create"
+	@echo "... mmap_read"
+	@echo "... mmap_update"
 	@echo "... test"
 	@echo "... src/mmap_create.o"
 	@echo "... src/mmap_create.i"
 	@echo "... src/mmap_create.s"
+	@echo "... src/mmap_read.o"
+	@echo "... src/mmap_read.i"
+	@echo "... src/mmap_read.s"
+	@echo "... src/mmap_update.o"
+	@echo "... src/mmap_update.i"
+	@echo "... src/mmap_update.s"
 	@echo "... tests/test_spsc_queue.o"
 	@echo "... tests/test_spsc_queue.i"
 	@echo "... tests/test_spsc_queue.s"
