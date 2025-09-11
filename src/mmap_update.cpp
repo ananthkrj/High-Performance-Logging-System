@@ -15,7 +15,6 @@ file
 
 
 int main(int argc, char *argv[]) {
-
     struct stat fileStatus;
 
     // need two argumentsm so args cant be 3

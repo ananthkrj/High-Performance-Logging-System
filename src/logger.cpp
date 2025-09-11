@@ -28,6 +28,11 @@ where logs are actually being formatted and sent to the queue
 5. add optimization (SIMD)
 */
 
+#include <include/rigtorps_spsc_queue.hpp>
+#include <src/mmap_writer.cpp>
+#include <src/mmap_create.cpp>
+#include <src/mmap_read.cpp>
+#include <src/mmap_
 #include <iostream>
 
 // modularize into different functions first
@@ -60,25 +65,15 @@ void messageFormat() {
         unsigned long long thread_id;
     };
 
+
     // find out if i need list initalization or constructor after
     // here to actually utilize the test creation of a log
 
     // find out how do i actually test inputting a log properly here
 }
 
-void pipeline() {
 
-}
-
-// likely need to add concurrency to pipeline function itself
-void threading() {
-
-}
-
-void configuration() {
-
-}
-
-int main() {
+int main(int argc, char* argv[]) {
     // will call simd here
+
 }
