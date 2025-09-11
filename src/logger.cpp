@@ -32,7 +32,38 @@ where logs are actually being formatted and sent to the queue
 
 // modularize into different functions first
 void messageFormat() {
+    // need a struct to define the levels of a log (message severity)
+    // use enum to create new data type with my own parameters
+    // that will makeup one of single log entry parmeters
+    enum class LogLevel {
+        TRACE,
+        WARN,
+        ERROR,
+        CRITICAL
+    };
 
+    // and another struct to hold the information for a single log entry
+    // create logentry datastructure using struct
+    // level, timestamp, message, filename, line, function, and 
+    // thread_id will go into this struct
+    // struct will allow me to bundle multiple variables into a single 
+    // so it is perfect here
+    struct logs {
+        LogLevel label;
+        // use chrono type for timestamp
+        std::string message;
+        std::string filename;
+        int line;
+        std::string function;
+        // why does the thread_id need to be unsigned and a long long:
+        // because it may be an extremely long number
+        unsigned long long thread_id;
+    };
+
+    // find out if i need list initalization or constructor after
+    // here to actually utilize the test creation of a log
+
+    // find out how do i actually test inputting a log properly here
 }
 
 void pipeline() {
