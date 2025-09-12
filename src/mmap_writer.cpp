@@ -11,13 +11,15 @@
 #define PERM 0644
 
 namespace mmapwriter {
-
 class mmapWriter {
-
 public:
-    void mmap_create(int argc, char* argv[]) {
+    int mmap_create(int argc, char* argv[]) {
         // if statement to open the file
         // cannot have 3 arguments
+        if (argc != 3) {
+            std::cout << "Usage : mmap_create <file-name> <Message>" << std::endl;
+            return 1;
+        }
 
         // declare the overall size of the arguments in a fsize variable
         size_t fsize = strlen(argv[2]) + 1;
@@ -48,13 +50,18 @@ public:
         // close the file (fd) variable
         close(fd);
         // need to test
+        return EXIT_SUCCESS;
     }
 
-    void mmap_read(int argc, char* argv[]) {
+    int mmap_read(int argc, char* argv[]) {
         struct stat fileStatus;
 
         // can only have one arguemnt, being the filename
         // return success if this happens sucessfully
+        if (argc != 2) {
+            std::cout << "Usage: mmap_read <file-name>" << std::endl;
+            return 1;
+        }
 
         // open the file, so intiailzie the fd variable with
         // the arguments and rd only mode O_RDONLY
@@ -84,7 +91,11 @@ public:
         close(fd);
     }
 
-    void mmap_update(int argc, char* argv[]) {
+    int mmap_update(int argc, char* argv[]) {
+        if (argc != 3) {
+            std::cout << "Usage: mmap_update <file-name> <Message>" << std::endl;
+        }
+
         struct stat fileStatus;
 
         // initialize length of arguments
@@ -123,13 +134,15 @@ public:
 
         // close
         close(fd);
+
+        return EXIT_SUCCESS;
     }
 
     // place holder of what should go in the logger file
     int main(int argc, char* argv[]) {
         std::string command = argv[1];
 
-        if (command == "create" && argc != 4) {
+        if (argc != 4) {
             std::cout << "Usage : create mmap_create <file-name> <Message>" << std::endl;
             return EXIT_SUCCESS;
         } 
