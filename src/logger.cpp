@@ -35,7 +35,6 @@ where logs are actually being formatted and sent to the queue
 #include <format>
 
 
-
 // modularize into different functions first
 
 // need a struct to define the levels of a log (message severity)
@@ -75,8 +74,8 @@ template <typename...Args>
 // find out what fmt here is
 LogInfo createlogmessage(const std::string& level, std::format_string<Args...> fmt, Args&&... args) {
     LogInfo msg;
-    /*
-    Figure out how to change this for my implementation
+    
+    // Figure out how to change this for my implementation
     // creation fo msg variable using LogInfo struct is important for other variables 
     LogInfo msg;
     msg.timestamp = std::chrono::system_clock::now();
@@ -84,9 +83,9 @@ LogInfo createlogmessage(const std::string& level, std::format_string<Args...> f
     msg.formatted_message = std::format(fmt, std::forward<Args>(args)...);
     return msg;
 
-    in logging system goal creation of a log should look like this:
+   //  in logging system goal creation of a log should look like this:
     LogInfo my_log = createlogmessage("INFO", "User {} logged in from IP {}", "Alice", "192.168.1.1");
-    */
+  
 }
 
 int main(int argc, char* argv[]) {
@@ -99,16 +98,30 @@ int main(int argc, char* argv[]) {
     // 3. format the final string (also likely done?)
 
     // 4. Queue the log message (call spscqueue function)
-    highLogger::SPSCQueue<int> queue();
+    highLogger::SPSCQueue<LogInfo> queue();
 
-    // find way to define createlog message here, likely need to call function
-    LogInfo msg = queue.emplace();
-    LogInfo msg = queue.push();
+    // 1. COnsumer Thread Logic
+    // producer code
+    highLogger::queue.emplace(msg);
+    // consumer side that drains the queue: queue.front() then move to mmap operations then pop
+    // may need to be a pointer
+    LogInfo* queuedMsg = highLogger::queue.front();
+    
+    // need to create mmap operation 
 
-    // pseudo code, obviously write a real condition which checks if the queue has
-    // element in it (msg or not)
-    while (queue_has_data) {
-        LogInfo msg = queue.pop();
+    // also need to convert LogInfo to string format for disk writing, and to be
+    // able to send it to the mmap operations
+    // then actually perform the mmap operation
+
+    if (argc != 4) {
+	std::cout << "Usage : create mmap_create <LogInfo> <log entry>" << std::endl;
+        return EXIT_SUCCESS;
+    } 
+
+    
+    // pseudo code, obviously write a real condition whi
+    while (!queue.empty()) {
+        queue.pop();
     }
 
     // 5. consumer side, pop from queue, mmap writer writes to the disk
