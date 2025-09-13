@@ -73,8 +73,6 @@ struct LogInfo {
 template <typename...Args>
 // find out what fmt here is
 LogInfo createlogmessage(const std::string& level, std::format_string<Args...> fmt, Args&&... args) {
-    LogInfo msg;
-    
     // Figure out how to change this for my implementation
     // creation fo msg variable using LogInfo struct is important for other variables 
     LogInfo msg;
@@ -82,28 +80,33 @@ LogInfo createlogmessage(const std::string& level, std::format_string<Args...> f
     msg.level = level;
     msg.formatted_message = std::format(fmt, std::forward<Args>(args)...);
     return msg;
-
-   //  in logging system goal creation of a log should look like this:
-    LogInfo my_log = createlogmessage("INFO", "User {} logged in from IP {}", "Alice", "192.168.1.1");
-  
 }
 
+// problem that i need to fix: createlogmessage has a declaration of msg variable using the 
+// log ingo struct
 // Create logmessage struct (done)
 
 // format the final string (also likely done?)
 
 int main(int argc, char* argv[]) {
+
+    // call the createlogmessage function, and an example log insertion. 
+    // Double check if this struct is converted into a string from previous
+    // function, and also fix the arguments in this example creation, so that it is
+    // properly in tune with function declaration above
+    LogInfo my_log = createlogmessage("INFO", "User {} logged in from IP {}", "Alice", "192.168.1.1");
+
     // Queue the log message (call spscqueue function)
-    highLogger::SPSCQueue<LogInfo> queue();
+    highLogger::SPSCQueue<LogInfo> queue(100);
 
     // 1. Producer and Consumer Thread Logic
 
     // producer thread logic
-    highLogger::queue.emplace(msg);
+    queue.emplace(my_log);
 
     // 1a. consumer side that drains the queue: queue.front() then move to mmap operations then pop
 
-    LogInfo* queuedMsg = highLogger::queue.front();
+    LogInfo* queuedMsg = queue.front();
 
     // 1b. mmap functions need to accept LogInfo data
     // Then need to convert LogInfo to string format for disk writing, and to be
@@ -119,7 +122,7 @@ int main(int argc, char* argv[]) {
     
     // pseudo code
     while (!queue.empty()) {
-        highLogger::queue.pop();
+        queue.pop();
     }
 
     // 3. Error Handling
