@@ -88,30 +88,28 @@ LogInfo createlogmessage(const std::string& level, std::format_string<Args...> f
   
 }
 
+// Create logmessage struct (done)
+
+// format the final string (also likely done?)
+
 int main(int argc, char* argv[]) {
-    // 1. parse format string
-    // making progress toward this above
-
-    // 2. Create logmessage struct (done)
-
-    
-    // 3. format the final string (also likely done?)
-
-    // 4. Queue the log message (call spscqueue function)
+    // Queue the log message (call spscqueue function)
     highLogger::SPSCQueue<LogInfo> queue();
 
-    // 1. COnsumer Thread Logic
-    // producer code
-    highLogger::queue.emplace(msg);
-    // consumer side that drains the queue: queue.front() then move to mmap operations then pop
-    // may need to be a pointer
-    LogInfo* queuedMsg = highLogger::queue.front();
-    
-    // need to create mmap operation 
+    // 1. Producer and Consumer Thread Logic
 
-    // also need to convert LogInfo to string format for disk writing, and to be
+    // producer thread logic
+    highLogger::queue.emplace(msg);
+
+    // 1a. consumer side that drains the queue: queue.front() then move to mmap operations then pop
+
+    LogInfo* queuedMsg = highLogger::queue.front();
+
+    // 1b. mmap functions need to accept LogInfo data
+    // Then need to convert LogInfo to string format for disk writing, and to be
     // able to send it to the mmap operations
-    // then actually perform the mmap operation
+    // 2. then actually perform file writing through memory mmapping
+    // that was builtz
 
     if (argc != 4) {
 	std::cout << "Usage : create mmap_create <LogInfo> <log entry>" << std::endl;
@@ -119,16 +117,28 @@ int main(int argc, char* argv[]) {
     } 
 
     
-    // pseudo code, obviously write a real condition whi
+    // pseudo code
     while (!queue.empty()) {
-        queue.pop();
+        highLogger::queue.pop();
     }
 
-    // 5. consumer side, pop from queue, mmap writer writes to the disk
-    // just mini part, need to alter
-    // i know i am passing in the msg as an argument, so need to make changers
-    // to mmap_writer file
-    // also find out what msg.formatted_string does
+    // 3. Error Handling
+    // cases to handle:
+    // What happens when queue is full
+    // what happens when disk write fails, what causes that
+    // basic error recovery strats and implement that
+
+
+    // 4. configuration system
+    // log level filtering (only write ERROR)
+    // file rotation policies
+    // output file paths
+
+    // 5. performance optimizations
+    // SIMD parser implementation
+    // memory pool allocation
+    // batch processing multiple messages, that actual "concurrent" processes
+
     mmapwriter::mmap_create(1, msg.formatted_string);
     mmapwriter::mmap_read(1, msg.formatted_string);
 }
