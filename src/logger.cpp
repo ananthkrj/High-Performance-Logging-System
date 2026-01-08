@@ -28,11 +28,13 @@ where logs are actually being formatted and sent to the queue
 5. add optimization (SIMD)
 */
 
-#include <include/rigtorps_spsc_queue.hpp>
-#include <src/mmap_writer.cpp>
+#include "../include/spsc_queue1.hpp"
+#include "../include/mmap_writer.hpp"
 #include <iostream>
 #include <string>
 #include <format>
+#include <chrono>
+#include <thread>
 
 
 // modularize into different functions first
@@ -55,14 +57,13 @@ enum class LogLevel {
 // so it is perfect here
 struct LogInfo {
     LogLevel label;
-    // use chrono type for timestamp
+    std::chrono::system_clock::time_point timestamp;
     std::string level;
     std::string message;
+    std::string formatted_message;
     std::string filename;
     int line;
     std::string function;
-    // why does the thread_id need to be unsigned and a long long:
-    // because it may be an extremely long number
     unsigned long long thread_id;
 };
 

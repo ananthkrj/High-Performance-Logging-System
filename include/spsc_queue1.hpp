@@ -212,4 +212,4 @@ private:
   alignas(kCacheLineSize) std::atomic<size_t> readIdx_ = {0};
   alignas(kCacheLineSize) size_t writeIdxCache_ = 0;
 };
-} // namespace rigtorp
+} // namespace
