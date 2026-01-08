@@ -4,7 +4,7 @@ implementation to test
 
 */
 
-#include <rigtorps_spsc_queue.hpp>
+#include "spsc_queue1.hpp"
 #include <gtest/gtest.h>
 
 // for now just include an external spscqueue

@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System"
+CMAKE_SOURCE_DIR = /Users/ananthjunutula/High-Performance-Logging-System-1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build"
+CMAKE_BINARY_DIR = /Users/ananthjunutula/High-Performance-Logging-System-1/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,16 +87,16 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build/CMakeFiles" "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build//CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ananthjunutula/High-Performance-Logging-System-1/build/CMakeFiles /Users/ananthjunutula/High-Performance-Logging-System-1/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ananthjunutula/High-Performance-Logging-System-1/build/CMakeFiles 0
 .PHONY : all
 
 # The main codegen target
 codegen: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build/CMakeFiles" "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build//CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ananthjunutula/High-Performance-Logging-System-1/build/CMakeFiles /Users/ananthjunutula/High-Performance-Logging-System-1/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 codegen
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/ananthjunutula/Personal Projects/High-Performance-Logging-System/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ananthjunutula/High-Performance-Logging-System-1/build/CMakeFiles 0
 .PHONY : codegen
 
 # The main clean target
@@ -175,6 +175,43 @@ mmap_update/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/build
 .PHONY : mmap_update/fast
 
+#=============================================================================
+# Target rules for targets named logger
+
+# Build rule for target.
+logger: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 logger
+.PHONY : logger
+
+# fast build rule for target.
+logger/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/build
+.PHONY : logger/fast
+
+src/logger.o: src/logger.cpp.o
+.PHONY : src/logger.o
+
+# target to build an object file
+src/logger.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/logger.cpp.o
+.PHONY : src/logger.cpp.o
+
+src/logger.i: src/logger.cpp.i
+.PHONY : src/logger.i
+
+# target to preprocess a source file
+src/logger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/logger.cpp.i
+.PHONY : src/logger.cpp.i
+
+src/logger.s: src/logger.cpp.s
+.PHONY : src/logger.s
+
+# target to generate assembly for a file
+src/logger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/logger.cpp.s
+.PHONY : src/logger.cpp.s
+
 src/mmap_create.o: src/mmap_create.cpp.o
 .PHONY : src/mmap_create.o
 
@@ -247,6 +284,30 @@ src/mmap_update.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mmap_update.dir/build.make CMakeFiles/mmap_update.dir/src/mmap_update.cpp.s
 .PHONY : src/mmap_update.cpp.s
 
+src/mmap_writer.o: src/mmap_writer.cpp.o
+.PHONY : src/mmap_writer.o
+
+# target to build an object file
+src/mmap_writer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/mmap_writer.cpp.o
+.PHONY : src/mmap_writer.cpp.o
+
+src/mmap_writer.i: src/mmap_writer.cpp.i
+.PHONY : src/mmap_writer.i
+
+# target to preprocess a source file
+src/mmap_writer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/mmap_writer.cpp.i
+.PHONY : src/mmap_writer.cpp.i
+
+src/mmap_writer.s: src/mmap_writer.cpp.s
+.PHONY : src/mmap_writer.s
+
+# target to generate assembly for a file
+src/mmap_writer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/logger.dir/build.make CMakeFiles/logger.dir/src/mmap_writer.cpp.s
+.PHONY : src/mmap_writer.cpp.s
+
 tests/test_spsc_queue.o: tests/test_spsc_queue.cpp.o
 .PHONY : tests/test_spsc_queue.o
 
@@ -280,10 +341,14 @@ help:
 	@echo "... codegen"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... logger"
 	@echo "... mmap_create"
 	@echo "... mmap_read"
 	@echo "... mmap_update"
 	@echo "... test"
+	@echo "... src/logger.o"
+	@echo "... src/logger.i"
+	@echo "... src/logger.s"
 	@echo "... src/mmap_create.o"
 	@echo "... src/mmap_create.i"
 	@echo "... src/mmap_create.s"
@@ -293,6 +358,9 @@ help:
 	@echo "... src/mmap_update.o"
 	@echo "... src/mmap_update.i"
 	@echo "... src/mmap_update.s"
+	@echo "... src/mmap_writer.o"
+	@echo "... src/mmap_writer.i"
+	@echo "... src/mmap_writer.s"
 	@echo "... tests/test_spsc_queue.o"
 	@echo "... tests/test_spsc_queue.i"
 	@echo "... tests/test_spsc_queue.s"

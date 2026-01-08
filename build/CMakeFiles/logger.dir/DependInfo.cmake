@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/ananthjunutula/High-Performance-Logging-System-1/src/mmap_read.cpp" "CMakeFiles/mmap_read.dir/src/mmap_read.cpp.o" "gcc" "CMakeFiles/mmap_read.dir/src/mmap_read.cpp.o.d"
+  "/Users/ananthjunutula/High-Performance-Logging-System-1/src/logger.cpp" "CMakeFiles/logger.dir/src/logger.cpp.o" "gcc" "CMakeFiles/logger.dir/src/logger.cpp.o.d"
+  "/Users/ananthjunutula/High-Performance-Logging-System-1/src/mmap_writer.cpp" "CMakeFiles/logger.dir/src/mmap_writer.cpp.o" "gcc" "CMakeFiles/logger.dir/src/mmap_writer.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

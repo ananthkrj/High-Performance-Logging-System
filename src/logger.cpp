@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
     // Double check if this struct is converted into a string from previous
     // function, and also fix the arguments in this example creation, so that it is
     // properly in tune with function declaration above
-    LogInfo my_log = createlogmessage("INFO", "User {} logged in from IP {}", "Alice", "192.168.1.1");
+    LogInfo my_log = createlogmessage("INFO", "User {} logged in from IP {}", "Ananth Junutula", "192.168.1.1");
 
     // Queue the log message (call spscqueue function)
     highLogger::SPSCQueue<LogInfo> queue(100);
@@ -115,13 +115,10 @@ int main(int argc, char* argv[]) {
     // 2. then actually perform file writing through memory mmapping
     // that was builtz
 
-    if (argc != 4) {
-	std::cout << "Usage : create mmap_create <LogInfo> <log entry>" << std::endl;
-        return EXIT_SUCCESS;
-    } 
+    // Remove argc check - not needed for demo 
 
     
-    // pseudo code
+    // pop from the queue
     while (!queue.empty()) {
         queue.pop();
     }
@@ -143,6 +140,10 @@ int main(int argc, char* argv[]) {
     // memory pool allocation
     // batch processing multiple messages, that actual "concurrent" processes
 
-    mmapwriter::mmap_create(1, msg.formatted_string);
-    mmapwriter::mmap_read(1, msg.formatted_string);
+    // Create mmap_writer instance and write log
+    mmapwriter::mmapWriter writer;
+    writer.mmap_create("test.log", my_log.formatted_message);
+    writer.mmap_read("test.log");
+    
+    return 0;
 }

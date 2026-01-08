@@ -12,8 +12,6 @@
 #define PERM 0644
 
 namespace mmapwriter {
-class mmapWriter {
-public:
     int mmap_create(const std::string& filename, const std::string& message) {
         // declare the overall size of the message in a fsize variable
         size_t fsize = message.length() + 1;
@@ -57,112 +55,108 @@ public:
         return 0;
     }
 
-    int mmap_read(int argc, char* argv[]) {
+    int mmap_read(const std::string& filename) {
         struct stat fileStatus;
 
-        // can only have one arguemnt, being the filename
-        // return success if this happens sucessfully
-        if (argc != 2) {
-            std::cout << "Usage: mmap_read <file-name>" << std::endl;
+        // open the file in read-only mode
+        int fd = open(filename.c_str(), O_RDONLY);
+        if (fd == -1) {
+            std::cerr << "Error opening file: " << filename << std::endl;
             return 1;
         }
 
-        // open the file, so intiailzie the fd variable with
-        // the arguments and rd only mode O_RDONLY
-        int fd = open(argv[1], O_RDONLY);
-
-        // get file size using fstat, and fd, pass fileStatus by address
-        fstat(fd, &fileStatus);
-        // can get size of file using file status variable created with
+        // get file size using fstat
+        if (fstat(fd, &fileStatus) == -1) {
+            std::cerr << "Error getting file status" << std::endl;
+            close(fd);
+            return 1;
+        }
+        
         size_t fsize = fileStatus.st_size;
 
         // print the size 
-        std::cout << "File: " << argv[1] << " size is " << fsize << std::endl;
+        std::cout << "File: " << filename << " size is " << fsize << std::endl;
 
-        // perform mapping operstion in void pointer named addr
-        // the only flags we need for reading operations
-        // should be PROT_READ so that pages can be read, and MAP_SHARED
-        // so that updates to the mapping can viewed to other processes
-        // pass in memory address, size, flags, fd (file descriptor), offset
+        // perform mapping operation
         void *addr = mmap(NULL, fsize, PROT_READ, MAP_SHARED, fd, 0);
-        // print address to test, type cast address
-        std::cout << (char*)addr << std::endl;
-
-        // unmap, no need to copy memory or sync any memory
-        munmap(addr, fsize);
-
-        // close 
-        close(fd);
-    }
-
-    int mmap_update(int argc, char* argv[]) {
-        if (argc != 3) {
-            std::cout << "Usage: mmap_update <file-name> <Message>" << std::endl;
-        }
-
-        struct stat fileStatus;
-
-        // initialize length of arguments
-        size_t length = strlen(argv[2]) + 1;
-
-        // declare fd (file descriptor variable using args, O_RDWR, and the linux permission)
-        int fd = open(argv[1], O_RDWR, PERM);
-
-        // use fstat to get size of the file
-        fstat(fd, &fileStatus);
-        // then call filestatus.st_size in fsize variable declaration
-        size_t fsize = fileStatus.st_size;
-    
-        // print size of file args
-        std::cout << "File : " << argv[1] << " size is" << length << ":" << fsize << std::endl;
-
-        // mmap operation with proper flags into addr variable 
-        // need to pass memory address (let compiler decide, size, prot read, and 
-        // write flags, map shared flag fd, then the offsert which is 0)
-        void *addr = mmap(addr, fsize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-
-        // print read addre vsraible
-        std::cout << (char*)addr << std::endl;
-
-        // memcpy 
-        // copy address and arguments, then pass in length of the arguments
-        memcpy(addr, argv[2], strlen(argv[2]) + 1);
-        // print after copy, print the type casted addr
-        std::cout << (char*)addr << std::endl;
-
-        // sync addr fisze, (writing changes back to the disk)
-        msync(addr, fsize, MS_SYNC);
-
-        // unmap
-        munmap(addr, fsize);
-
-        // close
-        close(fd);
-
-        return EXIT_SUCCESS;
-    }
-
-    // place holder of what should go in the logger file
-    int main(int argc, char* argv[]) {
-        std::string command = argv[1];
-
-        if (argc != 4) {
-            std::cout << "Usage : create mmap_create <file-name> <Message>" << std::endl;
-            return EXIT_SUCCESS;
-        } 
-        else if (command == "read") {
-            std::cout << "Usage : read mmap_read <file-name>" << std::endl;
-            return EXIT_SUCCESS;
-        } 
-        else if (command == "update") {
-            std::cout << "Usage : update mmap_update <file-name> <Message" << std::endl;
-            return EXIT_SUCCESS;
-        } else {
-            std::cout << "Only available commands are: create, read, update" << std::endl;
-            std::cout << "Enter a valid command: " << command << std::endl;
+        if (addr == MAP_FAILED) {
+            std::cerr << "Error mapping file" << std::endl;
+            close(fd);
             return 1;
         }
+        
+        // print address content
+        std::cout << (char*)addr << std::endl;
+
+        // unmap and close
+        munmap(addr, fsize);
+        close(fd);
+        
         return 0;
     }
-};
+
+    int mmap_update(const std::string& filename, const std::string& message) {
+        struct stat fileStatus;
+
+        // initialize length of message
+        size_t length = message.length() + 1;
+
+        // declare fd (file descriptor variable)
+        int fd = open(filename.c_str(), O_RDWR, PERM);
+        if (fd == -1) {
+            std::cerr << "Error opening file: " << filename << std::endl;
+            return 1;
+        }
+
+        // use fstat to get size of the file
+        if (fstat(fd, &fileStatus) == -1) {
+            std::cerr << "Error getting file status" << std::endl;
+            close(fd);
+            return 1;
+        }
+        
+        size_t fsize = fileStatus.st_size;
+    
+        // print size of file
+        std::cout << "File: " << filename << " size is " << length << ":" << fsize << std::endl;
+
+        // mmap operation with proper flags
+        void *addr = mmap(NULL, fsize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        if (addr == MAP_FAILED) {
+            std::cerr << "Error mapping file" << std::endl;
+            close(fd);
+            return 1;
+        }
+
+        // print original content
+        std::cout << "Original: " << (char*)addr << std::endl;
+
+        // memcpy new message
+        memcpy(addr, message.c_str(), message.length() + 1);
+        
+        // print after copy
+        std::cout << "Updated: " << (char*)addr << std::endl;
+
+        // sync changes back to disk
+        msync(addr, fsize, MS_SYNC);
+
+        // unmap and close
+        munmap(addr, fsize);
+        close(fd);
+
+        return 0;
+    }
+
+    // Implementation of mmapWriter methods
+    int mmapWriter::mmap_create(const std::string& filename, const std::string& message) {
+        return ::mmapwriter::mmap_create(filename, message);
+    }
+
+    int mmapWriter::mmap_read(const std::string& filename) {
+        return ::mmapwriter::mmap_read(filename);
+    }
+
+    int mmapWriter::mmap_update(const std::string& filename, const std::string& message) {
+        return ::mmapwriter::mmap_update(filename, message);
+    }
 }

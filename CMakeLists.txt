@@ -4,7 +4,7 @@ project(MyProject VERSION 1.0
                   DESCRIPTION "testing spsc queue"
                   LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(GTest REQUIRED)
 
@@ -31,6 +31,10 @@ add_executable(mmap_update src/mmap_update.cpp)
 # ./build mmap_update
 # Tests for all mmap operations fully work, however need to fix update
 # a little bit. Output text gets weird, and null. Or file cannot be displayed
+
+# Add logger executable
+add_executable(logger src/logger.cpp src/mmap_writer.cpp)
+target_include_directories(logger PRIVATE include)
 
 # How to launch and run lldb
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug

@@ -1,2 +1,2 @@
-# Empty dependencies file for all_mmap.
+# Empty dependencies file for logger.
 # This may be replaced when dependencies are built.
